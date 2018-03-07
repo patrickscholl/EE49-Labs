@@ -11,7 +11,7 @@ def h(pin):
 	global COUNTER
 	currenttime = time.time()
 	if pin.value() == 0:
-		if currenttime - lasttime > 0.5:
+		if currenttime - lasttime > 0.1:
 			COUNTER +=1
 			lasttime = currenttime
 			print("{}".format(COUNTER))
