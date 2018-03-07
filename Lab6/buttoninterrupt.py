@@ -10,12 +10,14 @@ def h(pin):
 	global lasttime
 	global COUNTER
 	currenttime = time.time()
-	if currenttime - lasttime > 0.5:
-		COUNTER +=1
-		lasttime = currenttime
-		print("{}".format(COUNTER))
-	else:
+	if pin.value() == 0:
+		if currenttime - lasttime > 0.5:
+			COUNTER +=1
+			lasttime = currenttime
+			print("{}".format(COUNTER))
+		else:
+			pass
+	else: 
 		pass
-
 
 p.irq(handler=h, trigger=Pin.IRQ_FALLING)
