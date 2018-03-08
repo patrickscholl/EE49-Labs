@@ -1,6 +1,5 @@
 from machine import Pin
 import time
-from micropython import schedule
 from board import A5
 
 p = Pin(A5, mode=Pin.IN, pull=Pin.PULL_UP)
