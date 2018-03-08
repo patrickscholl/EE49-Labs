@@ -1,6 +1,6 @@
 from machine import Pin, PWM, Timer
 from board import LED, A5, A8, ADC6, ADC3
-pin = Pin(A5, Pin.OPEN_DRAIN)
+pin = Pin(A8, Pin.OPEN_DRAIN)
 #Note Frequencies
 C3 = 131
 CS3 = 139
@@ -74,14 +74,17 @@ State = False
 fight = [F3, B4, F3, D4, B4, D4, F4, F4, F4, F4, F4, F4, F4, F4, F3, D4, D4, C4, B4, off, B4, B4, B4, B4, B4, B4, B4, B4, B4, A4, A4, A4, GS3, GS3, GS3, G3, G3, G3, G3, G3, G3, G3, G3, G3, B4, E4, E4, E4, E4, E4, E4, D4, D4, D4, C4, C4, C4, B4, B4, B4, B4, B4, B4, B4, B4, B4]
 pwm = PWM(pin, freq=FREQUENCY, duty = 50, 1)
 i = 0
+xadc = ADC(Pin(ADC6))
+yadc = ADC(Pin(ADC3))
 def tune_cb(timer):
-	global i
+	global State
+	global FREQUENCY
 	if State == False:
 		FREQUENCY = fight[i]
 		i+=1
-		pwm.freq(FREQUENCY)
 	else: 
-
+		FREQUENCY = .5*(xadc.read()**2 + yadc.read()**2)**(0.5)
+	pwm.freq(FREQUENCY)
 tim = Timer(1)
 tim.init(period=167, mode=tim.PERIODIC, callback = tune_cb)
 
