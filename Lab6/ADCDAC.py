@@ -5,10 +5,10 @@ from time import sleep
 
 dac1 = DAC(Pin(DAC1))
 adc = ADC(Pin(ADC6))
-adc.attn(ADC.ATTN_11DB)
+adc.atten(ADC.ATTN_11DB)
 for i in range(255):
-	val = dac1.write(i)
-	print(val)
-	delay(.1)
+	dac1.write(i)
+	print(i)
+	sleep(.1)
 	val2 = adc.read()
 	print(val2)
