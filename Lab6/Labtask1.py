@@ -1,6 +1,6 @@
-from machine import Pin
+from machine import Pin, ADC
 import time
-from board import A5
+from board import A5, ADC6, ADC3
 
 p = Pin(A5, mode=Pin.IN, pull=Pin.PULL_UP)
 COUNTER = 0
@@ -20,3 +20,4 @@ def h(pin):
 		pass
 
 p.irq(handler=h, trigger=Pin.IRQ_FALLING)
+

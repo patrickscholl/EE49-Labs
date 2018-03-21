@@ -1,6 +1,6 @@
 from machine import Pin, PWM, Timer
-from board import LED
-pin = Pin(LED, Pin.OPEN_DRAIN)
+from board import A8
+pin = Pin(A8, Pin.OPEN_DRAIN)
 #Note Frequencies
 C3 = 131
 CS3 = 139
@@ -66,16 +66,20 @@ C8 = 4186
 CS8 = 4435
 D8 = 4699
 DS8 = 4978
-off = 0
-FREQUENCY = 0
+off = 1
+FREQUENCY = 1
 #song
 fight = [F3, B4, F3, D4, B4, D4, F4, F4, F4, F4, F4, F4, F4, F4, F3, D4, D4, C4, B4, off, B4, B4, B4, B4, B4, B4, B4, B4, B4, A4, A4, A4, GS3, GS3, GS3, G3, G3, G3, G3, G3, G3, G3, G3, G3, B4, E4, E4, E4, E4, E4, E4, D4, D4, D4, C4, C4, C4, B4, B4, B4, B4, B4, B4, B4, B4, B4]
-pwm = PWM(pin, freq=FREQUENCY, duty = 50, 1)
+pwm = PWM(pin, FREQUENCY, 80, 1)
 i = 0
 def tune_cb(timer):
 	global i
+	global fight
 	FREQUENCY = fight[i]
-	i+=1
+	if i < len(fight):
+		i+=1
+	else:
+		i = 0
 	pwm.freq(FREQUENCY)
 
 tim = Timer(1)
