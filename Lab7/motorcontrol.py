@@ -4,7 +4,7 @@ pin1 = Pin(A5, mode = Pin.OPEN_DRAIN)
 pin2 = Pin(A21, mode = Pin.OPEN_DRAIN)
 
 speed = 20
-ain1 = PWM(pin1, frequency = 10000, duty = 0, 0) 
+ain1 = PWM(pin1, frequency = 10000, duty = 0, 0)
 ain2 = PWM(pin2, frequency = 10000, duty = 0, 0)
 
 if speed < 0:
