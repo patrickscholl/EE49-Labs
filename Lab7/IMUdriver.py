@@ -1,7 +1,7 @@
 from mpu9250 import MPU9250
 from machine import I2C, Pin, Timer
 from board import SDA, SCL
-i2c = I2c(id = 0, scl =Pin(SCL), sda = Pin(SDA), freq = 400000)
+i2c = I2C(id = 0, scl =Pin(SCL), sda = Pin(SDA), freq = 400000)
 
 
 MPU9250._chip_id = 115
@@ -13,6 +13,6 @@ def cb(timer):
 	print(imu.temperature)
 	print(imu.accel.z)
 
-tim = Timer(4)
+tim = Timer(0)
 
 tim.init(period = 200, mode = tim.PERIODIC, callback = cb)
