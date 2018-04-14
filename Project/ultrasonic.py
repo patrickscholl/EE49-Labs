@@ -20,7 +20,7 @@ def ping(timer):
         trigger.value(0)
         try:
             pulse_time = machine.time_pulse_us(Echo, 1, 30000)
-            print(pulse_time)
+            print(pulse_time/58)
         except OSError as ex:
             if ex.args[0] == 110: # 110 = ETIMEDOUT
                 raise OSError('Out of range')
