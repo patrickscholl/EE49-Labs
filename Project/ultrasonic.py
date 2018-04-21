@@ -1,4 +1,4 @@
-from board import A8, A6
+from board import A8, A10
 from machine import Timer, Pin
 import machine
 import time
@@ -7,7 +7,7 @@ start = 0
 end = 0
 dist_cm = 0
 trigpin = A8
-Echopin = A6
+Echopin = A10
 trigger = Pin(trigpin, mode = Pin.OUT, pull = None)
 trigger.value(0)
 Echo = Pin(Echopin, mode = Pin.IN, pull = None)
@@ -20,7 +20,8 @@ def ping(timer):
         trigger.value(0)
         try:
             pulse_time = machine.time_pulse_us(Echo, 1, 30000)
-            print(pulse_time/58)
+            distance_cm = pulse_time/58
+            return distance_cm
         except OSError as ex:
             if ex.args[0] == 110: # 110 = ETIMEDOUT
                 raise OSError('Out of range')

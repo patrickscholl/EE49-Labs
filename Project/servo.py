@@ -4,14 +4,15 @@ import machine
 import time
 DUTY = 0
 pin = Pin(A10, mode=Pin.OUT)
-pwm = PWM(pin, 50, 0, 1)
+pwm = PWM(pin, 50, DUTY, 1)
 for i in range(13):
 	pwm.duty(i)
 	time.sleep_ms(80)
+	print(i)
 pwm.duty(1)
 
 time.sleep(1)
 
-pwm.duty(10)
+pwm.duty(0)
 time.sleep(1)
 pwm.deinit()
