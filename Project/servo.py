@@ -1,13 +1,13 @@
-from board import A10
+from board import A5
 from machine import Pin, PWM
 import machine
 import time
-DUTY = 0
-pin = Pin(A10, mode=Pin.OUT)
+DUTY = 4
+pin = Pin(A5, mode=Pin.OUT)
 pwm = PWM(pin, 50, DUTY, 1)
-for i in range(13):
-	pwm.duty(i)
-	time.sleep_ms(80)
+for i in range(6):
+	pwm.duty(i+DUTY)
+	time.sleep_ms(1000)
 	print(i)
 pwm.duty(1)
 

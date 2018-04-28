@@ -5,7 +5,7 @@ import time
 wlan = WLAN(STA_IF)
 wlan.active(True)
 if not wlan.isconnected():
-	wlan.connect('thwireless', 'blue&gold', 5000)
+	wlan.connect('EECS-PSK', 'Thequickbrown', 5000)
 
 for i in range(30):
 	if not wlan.isconnected():
@@ -28,10 +28,10 @@ except OSError:
 
 #### TO DO: Modify mqtt broker, get this publisher set up as a callback to a timer
 #start telnet server for remote login
-from network import telnet
+#from network import telnet
 
-print("start telnet server")
-telnet.start(user='User', password='telnet password ...')
+#print("start telnet server")
+#telnet.start(user='User', password='telnet password ...')
 #Set up pulissher node
 from mqttclient import MQTTClient 
 from time import sleep
@@ -43,6 +43,7 @@ PWD = ''
 mqtt = MQTTClient(BROKER)
 topic = 'BOSERBOIS/Project'
 sleep(0.3)
+print('Connecting to broker')
 
 ### TO DO: Set up the callback to record and actuate the servos at the same time, 
 #also possibly figure out phased arrays
@@ -56,33 +57,36 @@ import machine
 from math import sin, cos, pi
 import time
 DUTY = 3
-pin1 = Pin(A10, mode=Pin.OUT)
+pin1 = Pin(A8, mode=Pin.OUT)
 pwm1 = PWM(pin1, 50, DUTY, 1)
 pin2 = Pin(A5, mode=Pin.OUT)
 pwm2 = PWM(pin2, 50, DUTY, 2)
 ##Used code from https://github.com/mithru/MicroPython-Examples/blob/master/08.Sensors/HC-SR04/ultrasonic.py to initialize pins
-i = 3
-j = 3
+
 start = 0
 end = 0
 dist_cm = 0
-trigpin = A8
+trigpin = A10
 Echopin = A6
 trigger = Pin(trigpin, mode = Pin.OUT, pull = None)
 trigger.value(0)
 Echo = Pin(Echopin, mode = Pin.IN, pull = None)
 phi = 0
 theta = 0
-
-philist = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300]
-thetalist = [0, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90]
+pwm1.duty(6)
+pwm2.duty(3)
+philist = [90, 75, 60, 45, 30, 15, 0]
+thetalist = [0, 7.5, 15, 22.5, 30, 37.5, 45, 52.5, 60, 67.5, 75]
+i = 2
+j = 4
 def ping(timer):
 	global i
 	global j
+	global trigger
 	i_max = 13
-	j_max = 13
-	i_min = 3
-	j_min = 3
+	j_max = 15
+	i_min = 7
+	j_min = 5
 	trigger.value(0) # Stabilize the sensor
 	time.sleep_us(5)
 	trigger.value(1)
@@ -97,6 +101,7 @@ def ping(timer):
 	        raise OSError('Out of range')
  	    raise ex
 	r = distance_cm
+
 	i += 1
 	if i > i_max:
 		i = i_min
@@ -106,8 +111,8 @@ def ping(timer):
 
 	pwm1.duty(i)
 	pwm2.duty(j)
-	phi = philist[i-3]
-	theta = thetalist[j-3]
+	phi = philist[i-i_min]
+	theta = thetalist[j-j_min]
 	x = r*cos(theta*pi/180.0)*cos(phi*pi/180.0)
 	y = r*cos(theta*pi/180.0)*sin(phi*pi/180.0)
 	z = r*sin(theta*pi/180.0)
@@ -115,5 +120,5 @@ def ping(timer):
 	mqtt.publish(topic, message)
 
 tim = Timer(3)
-tim.init(period = 300, mode = tim.PERIODIC, callback = ping)
+tim.init(period = 500, mode = tim.PERIODIC, callback = ping)
 

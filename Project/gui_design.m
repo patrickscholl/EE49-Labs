@@ -51,16 +51,17 @@ function gui_design_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to gui_design (see VARARGIN)
 
+global subscribecount
 % Choose default command line output for gui_design
 handles.output = hObject;
-
 % Update handles structure
 guidata(hObject, handles);
+
 
 % This sets up the initial plot - only do when we are invisible
 % so window can get raised using gui_design.
 if strcmp(get(hObject,'Visible'),'off')
-    
+    subscribecount = 0;
 end
 
 % UIWAIT makes gui_design wait for user response (see UIRESUME)
@@ -83,18 +84,22 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %guidata(sub, Subscribe);
-    handles = guidata(hObject);
-    sub = handles.Sub;
+    mlock
+    persistent subscribernode
+    global subscribecount
     axes(handles.axes1);
-    myMQTT = mqtt('wss://iot.eclipse.org', 'Port', 443);
-
-
-    sub = subscribe(myMQTT, 'BOSERBOIS/Project');
-
-    handles.Sub = sub;
-    guidata(hObject, handles)
     
-    data = sub.readall.Data;
+    if subscribecount == 0
+        myMQTT = mqtt('wss://iot.eclipse.org', 'Port', 443);
+        subcribernode = subscribe(myMQTT, 'BOSERBOIS/Project');
+        subscribecount = 1;
+    else 
+    end
+
+    %handles.Sub = sub;
+    %guidata(hObject, handles)
+    
+    data = subscribernode.readall.Data;
     x = zeros(size(data,1));
     y = zeros(size(data,1));
     z = zeros(size(data,1));
@@ -105,6 +110,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
         z(i) = str2double(chardata(18:25));
     end
     plot3(x, y, z, 'o')
+    
 
 
 
